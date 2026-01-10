@@ -1,0 +1,3 @@
+{
+	"extends": "@bdsg/config/tsconfig.base.json"
+}

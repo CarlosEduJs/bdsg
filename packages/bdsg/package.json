@@ -1,0 +1,63 @@
+{
+	"name": "bdsg",
+	"version": "0.0.1",
+	"description": "Design system generation library with WCAG accessibility compliance",
+	"license": "MIT",
+	"author": "carloseduj",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/carloseduj/bdsg.git"
+	},
+	"homepage": "https://github.com/carloseduj/bdsg#readme",
+	"bugs": {
+		"url": "https://github.com/carloseduj/bdsg/issues"
+	},
+	"keywords": [
+		"design-system",
+		"design-tokens",
+		"color-palette",
+		"typography-scale",
+		"spacing-scale",
+		"shadows",
+		"wcag",
+		"accessibility",
+		"a11y",
+		"contrast",
+		"zod"
+	],
+	"type": "module",
+	"main": "./dist/index.js",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"types": "./dist/index.d.ts",
+			"import": "./dist/index.js",
+			"default": "./dist/index.js"
+		},
+		"./*": {
+			"types": "./dist/*.d.ts",
+			"import": "./dist/*.js",
+			"default": "./dist/*.js"
+		}
+	},
+	"files": [
+		"dist",
+		"README.md"
+	],
+	"scripts": {
+		"build": "tsc",
+		"check-types": "tsc --noEmit",
+		"test": "bun test",
+		"docs:tests": "bun run scripts/generate-test-docs.ts"
+	},
+	"devDependencies": {
+		"@bdsg/config": "workspace:*"
+	},
+	"peerDependencies": {
+		"typescript": "^5"
+	},
+	"dependencies": {
+		"zod": "4.3.5"
+	}
+}
