@@ -1,0 +1,20 @@
+{
+	"name": "bdsg-examples",
+	"version": "0.0.1",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"palette": "bun run src/color-palette.ts",
+		"typography": "bun run src/typography-scale.ts",
+		"spacing": "bun run src/spacing-scale.ts",
+		"shadows": "bun run src/shadows.ts",
+		"wcag": "bun run src/wcag-compliance.ts",
+		"tokens": "bun run src/design-tokens.ts"
+	},
+	"dependencies": {
+		"bdsg": "workspace:*"
+	},
+	"devDependencies": {
+		"@bdsg/config": "workspace:*"
+	}
+}
