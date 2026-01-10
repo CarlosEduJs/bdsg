@@ -1,16 +1,16 @@
 {
 	"name": "bdsg",
-	"version": "0.1.0",
+	"version": "0.1.1",
 	"description": "Design system generation library with WCAG accessibility compliance",
 	"license": "MIT",
 	"author": "carloseduj",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/carloseduj/bdsg.git"
+		"url": "https://github.com/carlosedujs/bdsg.git"
 	},
-	"homepage": "https://github.com/carloseduj/bdsg#readme",
+	"homepage": "https://github.com/carlosedujs/bdsg#readme",
 	"bugs": {
-		"url": "https://github.com/carloseduj/bdsg/issues"
+		"url": "https://github.com/carlosedujs/bdsg/issues"
 	},
 	"keywords": [
 		"design-system",
