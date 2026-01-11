@@ -4,8 +4,20 @@
  */
 
 import { z } from "zod";
-import { type HSL, hexToHsl, hslToHex } from "./color-utils";
+import { hexToHsl, hslToHex } from "./color-utils";
+import type { HSL } from "./types/color-utils.types";
 import { calculateContrast } from "./contrast";
+
+export type {
+	ColorShade,
+	ColorPalette,
+	PaletteToken,
+} from "./types/palette.types";
+import type {
+	ColorShade,
+	ColorPalette,
+	PaletteToken,
+} from "./types/palette.types";
 
 /**
  * Hex color validation schema
@@ -17,35 +29,6 @@ const HexColorSchema = z
 		/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
 		"Invalid hex color. Expected format: #RRGGBB or #RGB",
 	);
-
-/**
- * Color shade with value and recommended text
- */
-export interface ColorShade {
-	value: string;
-	textColor: string;
-	contrastRatio: number;
-}
-
-/**
- * Complete color palette
- */
-export interface ColorPalette {
-	name?: string;
-	base: string;
-	shades: {
-		50: ColorShade;
-		100: ColorShade;
-		200: ColorShade;
-		300: ColorShade;
-		400: ColorShade;
-		500: ColorShade;
-		600: ColorShade;
-		700: ColorShade;
-		800: ColorShade;
-		900: ColorShade;
-	};
-}
 
 /**
  * Shade configuration (lightness targets)
@@ -173,16 +156,6 @@ export function generatePalette(
 		base: baseColor,
 		shades,
 	};
-}
-
-/**
- * Palette token for design system export
- */
-export interface PaletteToken {
-	name: string;
-	value: string;
-	textColor: string;
-	contrastRatio: number;
 }
 
 /**

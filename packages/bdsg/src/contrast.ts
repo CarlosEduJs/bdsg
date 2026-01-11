@@ -5,6 +5,17 @@
 
 import { hexToRgb } from "./color-utils";
 
+export type {
+	WCAGLevel,
+	TextSize,
+	WCAGCompliance,
+} from "./types/contrast.types";
+import type {
+	WCAGLevel,
+	TextSize,
+	WCAGCompliance,
+} from "./types/contrast.types";
+
 /**
  * Luminance cache for performance optimization
  */
@@ -105,16 +116,6 @@ export function calculateContrast(
 }
 
 /**
- * WCAG conformance levels
- */
-export type WCAGLevel = "AA" | "AAA";
-
-/**
- * Text size categories
- */
-export type TextSize = "normal" | "large";
-
-/**
  * WCAG 2.1 minimum contrast requirements
  */
 export const WCAG_REQUIREMENTS = {
@@ -151,16 +152,6 @@ export function meetsWCAG(
 	size: TextSize,
 ): boolean {
 	return ratio >= WCAG_REQUIREMENTS[level][size];
-}
-
-/**
- * WCAG compliance result
- */
-export interface WCAGCompliance {
-	ratio: number;
-	AA: boolean;
-	AAA: boolean;
-	level: "fail" | "AA" | "AAA";
 }
 
 /**
