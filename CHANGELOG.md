@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.2] - 2026-01-10
+
+### Changed
+
+- **Type Organization**: All types are now in separate `.types.ts` files in folder `types`
+  - `color-utils.types.ts` -> `RGB`, `HSL`
+  - `contrast.types.ts` -> `WCAGLevel`, `TextSize`, `WCAGCompliance`
+  - `adjust.types.ts` -> `AdjustmentResult`, `ColorVariations`
+  - `palette.types.ts` -> `ColorShade`, `ColorPalette`, `PaletteToken`
+  - `typography.types.ts` -> `TypographyRatio`, `TypographyToken`, `TypographyScaleConfig`, `TypographyScale`, `TypographyExportToken`
+  - `spacing.types.ts` -> `SpacingMethod`, `SpacingToken`, `SpacingScaleConfig`, `SpacingScale`, `SpacingExportToken`
+  - `shadows.types.ts` -> `ShadowLayer`, `ShadowToken`, `ShadowConfig`, `ShadowScale`, `ShadowExportToken`
+  - `relations.types.ts` -> `Node`, `RelationSuggestion`
+- **Backward Compatible**: All types are still exported from the main module files
+
+[0.1.2]: https://github.com/carloseduj/bdsg/releases/tag/v0.1.2
+
+## [0.1.1] - 2026-01-10
+
+### Fixed
+
+- **Links**: Fixed links in npm to GitHub repository
+
+[0.1.1]: https://github.com/carloseduj/bdsg/releases/tag/v0.1.1
+
 ## [0.1.0] - 2026-01-10
 
 ### Added

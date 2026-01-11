@@ -7,6 +7,20 @@
 
 import { z } from "zod";
 
+export type {
+	TypographyRatio,
+	TypographyToken,
+	TypographyScaleConfig,
+	TypographyScale,
+	TypographyExportToken,
+} from "./types/typography.types";
+import type {
+	TypographyToken,
+	TypographyScaleConfig,
+	TypographyScale,
+	TypographyExportToken,
+} from "./types/typography.types";
+
 /**
  * Common typographic ratios based on musical intervals
  */
@@ -20,51 +34,6 @@ export const TYPOGRAPHY_RATIOS = {
 	"perfect-fifth": 1.5,
 	"golden-ratio": 1.618,
 } as const;
-
-export type TypographyRatio = keyof typeof TYPOGRAPHY_RATIOS;
-
-/**
- * Typography token with all properties
- */
-export interface TypographyToken {
-	name: string;
-	fontSize: number;
-	lineHeight: number;
-	letterSpacing: number;
-	/** Recommended font weight */
-	weight?: number;
-}
-
-/**
- * Typography scale configuration
- */
-export interface TypographyScaleConfig {
-	/** Base font size in pixels (default: 16) */
-	base?: number;
-	/** Scale ratio (default: "perfect-fourth") */
-	ratio?: TypographyRatio | number;
-	/** Number of steps up from base (default: 6) */
-	stepsUp?: number;
-	/** Number of steps down from base (default: 2) */
-	stepsDown?: number;
-	/** Base line height ratio (default: 1.5) */
-	baseLineHeight?: number;
-	/** Unit for output (default: "rem") */
-	unit?: "px" | "rem" | "em";
-	/** Token name prefix (default: "font-size") */
-	prefix?: string;
-}
-
-/**
- * Complete typography scale
- */
-export interface TypographyScale {
-	base: number;
-	ratio: number;
-	ratioName?: string;
-	tokens: TypographyToken[];
-	cssVariables: string;
-}
 
 /**
  * Typography config validation schema
@@ -285,17 +254,6 @@ export function generateTypographyScale(
 		tokens,
 		cssVariables,
 	};
-}
-
-/**
- * Typography token for design system export
- */
-export interface TypographyExportToken {
-	name: string;
-	value: string;
-	lineHeight: number;
-	letterSpacing: string;
-	category: "typography";
 }
 
 /**

@@ -3,25 +3,17 @@
  * Strategy: Lock hue, adjust lightness first, minimal chroma changes
  */
 
-import { type HSL, hexToHsl, hslToHex } from "./color-utils";
+import { hexToHsl, hslToHex } from "./color-utils";
+import type { HSL } from "./types/color-utils.types";
 import {
 	calculateContrast,
 	getRelativeLuminance,
-	type TextSize,
 	WCAG_REQUIREMENTS,
-	type WCAGLevel,
 } from "./contrast";
+import type { TextSize, WCAGLevel } from "./types/contrast.types";
 
-/**
- * Adjustment result
- */
-export interface AdjustmentResult {
-	original: string;
-	adjusted: string;
-	ratio: number;
-	iterations: number;
-	strategy: "lightness" | "chroma" | "fallback";
-}
+export type { AdjustmentResult, ColorVariations } from "./types/adjust.types";
+import type { AdjustmentResult, ColorVariations } from "./types/adjust.types";
 
 /**
  * Adjusts a color to meet WCAG contrast requirements.
@@ -168,20 +160,6 @@ export function adjustColorForContrast(
 				iterations,
 				strategy: "fallback",
 			};
-}
-
-/**
- * Color variations with accessible text color
- */
-export interface ColorVariations {
-	/** Base accessible color */
-	base: string;
-	/** Lighter variant */
-	light: string;
-	/** Darker variant */
-	dark: string;
-	/** Best text color (black or white) for use on base */
-	text: string;
 }
 
 /**

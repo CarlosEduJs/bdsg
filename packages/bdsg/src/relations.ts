@@ -5,27 +5,8 @@
  * and semantic conventions. Uses heuristics only - no metadata dependencies.
  */
 
-/**
- * Design token node
- */
-export interface Node {
-	id: string;
-	type: string;
-	category: string;
-	name: string;
-	value: unknown;
-}
-
-/**
- * Relation suggestion with confidence score
- */
-export interface RelationSuggestion {
-	fromNodeId: string;
-	toNodeId: string;
-	type: "uses" | "depends_on";
-	confidence: number; // 0-1
-	reason: string;
-}
+export type { Node, RelationSuggestion } from "./types/relations.types";
+import type { Node, RelationSuggestion } from "./types/relations.types";
 
 /**
  * Detects potential relations for a node using naming pattern heuristics.
