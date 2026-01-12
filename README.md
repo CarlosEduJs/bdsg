@@ -28,10 +28,22 @@ bdsg provides algorithms for generating design tokens:
 
 All inputs are validated with Zod schemas.
 
+Interactive CLI for terminal-based design system generation. See [bdsg-cli](#bdsg-cli).
+
 ## Installation
+
+### Library
 
 ```bash
 bun add bdsg
+```
+
+### CLI
+
+```bash
+npm install -g bdsg-cli
+# or
+bun add -g bdsg-cli
 ```
 
 ## Quick Start
@@ -89,6 +101,35 @@ const shadows = generateShadows({
 
 Full documentation: [packages/bdsg/README.md](./packages/bdsg/README.md)
 
+## bdsg-cli
+
+Interactive CLI for design system generation without leaving your terminal.
+
+### Commands
+
+```bash
+# Interactive setup
+bdsg init
+
+# Generate specific tokens
+bdsg generate palette "#3B82F6" -n primary
+bdsg generate typography -r golden-ratio
+bdsg generate spacing -m fibonacci
+bdsg generate shadows -s material
+
+# Validate WCAG contrast
+bdsg validate "#3B82F6" "#FFFFFF"
+```
+
+### Output Formats
+
+- **CSS Variables** - Standard CSS custom properties
+- **JSON Tokens** - Structured token data
+- **Tailwind v4** - `@theme` directive format
+- **Shadcn/ui** - Complete `globals.css` with dark mode
+
+Full documentation: [packages/bdsg-cli/README.md](./packages/bdsg-cli/README.md)
+
 ## Development
 
 ```bash
@@ -110,9 +151,11 @@ bun run check
 ```
 bdsg/
 ├── packages/
-│   └── bdsg/       # Core library
-│       ├── src/    # Source
-│       └── test/   # Tests (bun:test)
+│   ├── bdsg/       # Core library
+│   │   ├── src/    # Source
+│   │   └── test/   # Tests (bun:test)
+│   └── bdsg-cli/   # Interactive CLI
+│       └── src/    # Commands (init, generate, validate)
 ```
 
 ## License
