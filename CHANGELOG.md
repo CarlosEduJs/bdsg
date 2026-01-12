@@ -23,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Tailwind v4 (`@theme` directive)
   - Shadcn/ui (with dark mode support)
 
-[bdsg-cli 0.1.0]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg-cli-v0.1.0
+[bdsg-cli 0.1.0]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg-cli@v0.1.0
 
 ## [0.1.2] - 2026-01-10
 
