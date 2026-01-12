@@ -6,14 +6,15 @@
 import { hexToRgb } from "./color-utils";
 
 export type {
-	WCAGLevel,
 	TextSize,
 	WCAGCompliance,
+	WCAGLevel,
 } from "./types/contrast.types";
+
 import type {
-	WCAGLevel,
 	TextSize,
 	WCAGCompliance,
+	WCAGLevel,
 } from "./types/contrast.types";
 
 /**

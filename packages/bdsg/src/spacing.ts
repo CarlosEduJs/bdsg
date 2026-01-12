@@ -11,18 +11,19 @@
 import { z } from "zod";
 
 export type {
-	SpacingMethod,
-	SpacingToken,
-	SpacingScaleConfig,
-	SpacingScale,
 	SpacingExportToken,
+	SpacingMethod,
+	SpacingScale,
+	SpacingScaleConfig,
+	SpacingToken,
 } from "./types/spacing.types";
+
 import type {
-	SpacingMethod,
-	SpacingToken,
-	SpacingScaleConfig,
-	SpacingScale,
 	SpacingExportToken,
+	SpacingMethod,
+	SpacingScale,
+	SpacingScaleConfig,
+	SpacingToken,
 } from "./types/spacing.types";
 
 /**

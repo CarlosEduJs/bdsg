@@ -2,8 +2,9 @@
  * Color space conversion utilities
  */
 
-export type { RGB, HSL } from "./types/color-utils.types";
-import type { RGB, HSL } from "./types/color-utils.types";
+export type { HSL, RGB } from "./types/color-utils.types";
+
+import type { HSL, RGB } from "./types/color-utils.types";
 
 /**
  * Normalize hex color string
