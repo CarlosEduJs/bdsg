@@ -1,7 +1,7 @@
 # bdsg
 
 [![npm version](https://img.shields.io/npm/v/bdsg.svg)](https://www.npmjs.com/package/bdsg)
-[![CI](https://github.com/carloseduj/bdsg/actions/workflows/ci.yml/badge.svg)](https://github.com/carloseduj/bdsg/actions/workflows/ci.yml)
+[![CI](https://github.com/carlosedujs/bdsg/actions/workflows/ci.yml/badge.svg)](https://github.com/carloseduj/bdsg/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Design System Generation library for programmatic token creation with WCAG accessibility compliance.
