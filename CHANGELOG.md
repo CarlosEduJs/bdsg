@@ -5,6 +5,26 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [bdsg-cli 0.1.0] - 2026-01-11
+
+### Added
+
+- **New Package**: `bdsg-cli` - Interactive CLI for design system generation
+- **`bdsg init`**: Interactive setup with prompts for colors, typography, spacing, and shadows
+- **`bdsg generate`**: Generate specific tokens individually
+  - `generate palette <color>` - Generate color palette from hex
+  - `generate typography` - Generate typography scale
+  - `generate spacing` - Generate spacing scale
+  - `generate shadows` - Generate shadow tokens
+- **`bdsg validate`**: WCAG contrast analysis with auto-suggestions for accessibility compliance
+- **Output Formats**:
+  - CSS Variables
+  - JSON Tokens
+  - Tailwind v4 (`@theme` directive)
+  - Shadcn/ui (with dark mode support)
+
+[bdsg-cli 0.1.0]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg-cli-v0.1.0
+
 ## [0.1.2] - 2026-01-10
 
 ### Changed

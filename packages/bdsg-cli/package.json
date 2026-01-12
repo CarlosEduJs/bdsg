@@ -1,0 +1,25 @@
+{
+	"name": "bdsg-cli",
+	"version": "0.1.0",
+	"description": "CLI for design system generation",
+	"type": "module",
+	"bin": {
+		"bdsg": "./dist/index.js"
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch"
+	},
+	"dependencies": {
+		"bdsg": "workspace:*",
+		"commander": "^12.0.0",
+		"inquirer": "^9.2.0",
+		"chalk": "^5.3.0",
+		"ora": "^8.0.0"
+	},
+	"devDependencies": {
+		"@bdsg/config": "workspace:*",
+		"@types/inquirer": "^9.0.9",
+		"@types/node": "^25.0.6"
+	}
+}
