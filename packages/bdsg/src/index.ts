@@ -4,7 +4,7 @@ export {
 	adjustColorForContrast,
 	type ColorVariations,
 	generateAccessibleVariations,
-} from "./adjust";
+} from "./adjust.js";
 // Color utilities
 export {
 	type HSL,
@@ -15,7 +15,7 @@ export {
 	type RGB,
 	rgbToHex,
 	rgbToHsl,
-} from "./color-utils";
+} from "./color-utils.js";
 // Contrast calculation
 export {
 	calculateContrast,
@@ -27,7 +27,7 @@ export {
 	WCAG_REQUIREMENTS,
 	type WCAGCompliance,
 	type WCAGLevel,
-} from "./contrast";
+} from "./contrast.js";
 // Palette generation
 export {
 	type ColorPalette,
@@ -35,14 +35,14 @@ export {
 	generatePalette,
 	generatePaletteTokens,
 	type PaletteToken,
-} from "./palette";
+} from "./palette.js";
 // Relations detection
 export {
 	detectRelations,
 	type Node,
 	type RelationSuggestion,
 	wouldCreateDirectCycle,
-} from "./relations";
+} from "./relations.js";
 // Shadow generation
 export {
 	generateShadows,
@@ -53,7 +53,7 @@ export {
 	type ShadowLayer,
 	type ShadowScale,
 	type ShadowToken,
-} from "./shadows";
+} from "./shadows.js";
 // Spacing scale
 export {
 	generateSpacingScale,
@@ -64,7 +64,7 @@ export {
 	type SpacingScale,
 	type SpacingScaleConfig,
 	type SpacingToken,
-} from "./spacing";
+} from "./spacing.js";
 // Typography scale
 export {
 	generateTypographyScale,
@@ -75,4 +75,4 @@ export {
 	type TypographyScale,
 	type TypographyScaleConfig,
 	type TypographyToken,
-} from "./typography";
+} from "./typography.js";

@@ -13,6 +13,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [bdsg-cli 0.1.1]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg-cli@v0.1.1
 
+## [0.1.3] - 2026-01-12
+
+### Fixed
+
+- **ESM Build**: Switched from `tsc` to `tsup` for proper ESM bundling. The package now works correctly with Node.js ESM and in JavaScript files without import extension errors.
+
+### Changed
+
+- **Build Tool**: Replaced `tsc` with `tsup` for generating ESM bundle with proper module resolution
+- **Bundle**: All source files are now bundled into a single `index.js` instead of separate files
+
+[0.1.3]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg@v0.1.3
+
 ## [bdsg-cli 0.1.0] - 2026-01-11
 
 ### Added
