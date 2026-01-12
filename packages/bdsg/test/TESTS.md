@@ -2,14 +2,14 @@
 
 This document is auto-generated from the test files. Do not edit manually.
 
-Generated: 2026-01-10
+Generated: 2026-01-12
 
 ## Overview
 
 | Metric | Value |
 |--------|-------|
-| Total Tests | 249 |
-| Test Files | 9 |
+| Total Tests | 263 |
+| Test Files | 10 |
 
 ---
 
@@ -21,6 +21,7 @@ test/
   color-utils.test.ts  # Color Utils (34 tests)
   contrast.test.ts  # Contrast (39 tests)
   index.test.ts  # Index (33 tests)
+  oklch.test.ts  # Oklch (14 tests)
   palette.test.ts  # Palette (22 tests)
   relations.test.ts  # Relations (16 tests)
   shadows.test.ts  # Shadows (26 tests)
@@ -38,6 +39,7 @@ test/
 | Color Utils | `color-utils.test.ts` | 34 | 2 |
 | Contrast | `contrast.test.ts` | 39 | 6 |
 | Index | `index.test.ts` | 33 | 1 |
+| Oklch | `oklch.test.ts` | 14 | 1 |
 | Palette | `palette.test.ts` | 22 | 4 |
 | Relations | `relations.test.ts` | 16 | 1 |
 | Shadows | `shadows.test.ts` | 26 | 4 |
@@ -277,6 +279,39 @@ test/
 - typography scale works
 - spacing scale works
 - shadow scale works
+
+---
+
+## Oklch
+
+**File:** `test/oklch.test.ts`
+
+**Total Tests:** 14
+
+### Test Suites
+
+| Suite | Tests | Description |
+|-------|-------|-------------|
+| OKLCH Color Space | 14 | Test suite |
+
+### Test Cases
+
+#### OKLCH Color Space
+
+- converts white correctly
+- converts black correctly
+- converts pure red correctly
+- converts pure blue correctly
+- converts white correctly
+- converts black correctly
+- roundtrips colors accurately
+- returns start color at t=0
+- returns end color at t=1
+- returns midpoint at t=0.5
+- takes shortest hue path
+- generates correct number of steps
+- starts and ends with correct colors
+- produces vibrant midpoints (no muddy zone)
 
 ---
 
