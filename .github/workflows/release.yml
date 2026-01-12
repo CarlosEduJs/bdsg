@@ -3,7 +3,8 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - 'bdsg@v*'
+      - 'bdsg-cli@v*'
 
 permissions:
   contents: write
@@ -17,6 +18,33 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: Extract package info from tag
+        id: package_info
+        run: |
+          TAG_NAME=${GITHUB_REF#refs/tags/}
+          echo "Full tag: $TAG_NAME"
+          
+          # Extract package name and version
+          # Format: bdsg@v0.1.0 or bdsg-cli@v0.1.0
+          PACKAGE_NAME=$(echo $TAG_NAME | cut -d'@' -f1)
+          VERSION=$(echo $TAG_NAME | cut -d'@' -f2)
+          
+          echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+          
+          # Determine package directory
+          if [ "$PACKAGE_NAME" = "bdsg" ]; then
+            echo "package_dir=packages/bdsg" >> $GITHUB_OUTPUT
+          elif [ "$PACKAGE_NAME" = "bdsg-cli" ]; then
+            echo "package_dir=packages/bdsg-cli" >> $GITHUB_OUTPUT
+          else
+            echo "Unknown package: $PACKAGE_NAME"
+            exit 1
+          fi
+          
+          echo "Publishing $PACKAGE_NAME $VERSION from packages/$PACKAGE_NAME"
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
@@ -26,8 +54,9 @@ jobs:
         run: bun install
 
       - name: Run tests
+        if: steps.package_info.outputs.package_name == 'bdsg'
         run: bun test
-        working-directory: packages/bdsg
+        working-directory: ${{ steps.package_info.outputs.package_dir }}
 
       - name: Build
         run: bun run build
@@ -40,21 +69,24 @@ jobs:
 
       - name: Publish to npm
         run: npm publish --access public
-        working-directory: packages/bdsg
+        working-directory: ${{ steps.package_info.outputs.package_dir }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Generate changelog
         id: changelog
         run: |
-          # Get the previous tag
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          PACKAGE_NAME="${{ steps.package_info.outputs.package_name }}"
+          TAG_NAME="${{ steps.package_info.outputs.tag }}"
           
-          if [ -z "$PREV_TAG" ]; then
-            # First release - get all commits
+          # Get the previous tag for this package
+          PREV_TAG=$(git tag -l "${PACKAGE_NAME}@v*" --sort=-version:refname | grep -A1 "^${TAG_NAME}$" | tail -1 || echo "")
+          
+          if [ -z "$PREV_TAG" ] || [ "$PREV_TAG" = "$TAG_NAME" ]; then
+            # First release for this package - get all commits
             COMMITS=$(git log --pretty=format:"- %s (%h)" --no-merges)
           else
-            # Get commits since last tag
+            # Get commits since last tag for this package
             COMMITS=$(git log ${PREV_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
           fi
           
@@ -62,10 +94,11 @@ jobs:
           FEATURES=$(echo "$COMMITS" | grep -E "^- feat" || true)
           FIXES=$(echo "$COMMITS" | grep -E "^- fix" || true)
           DOCS=$(echo "$COMMITS" | grep -E "^- docs" || true)
-          OTHER=$(echo "$COMMITS" | grep -vE "^- (feat|fix|docs)" || true)
+          CHORE=$(echo "$COMMITS" | grep -E "^- chore" || true)
+          OTHER=$(echo "$COMMITS" | grep -vE "^- (feat|fix|docs|chore)" || true)
           
           # Build changelog
-          CHANGELOG=""
+          CHANGELOG="# ${PACKAGE_NAME} ${VERSION}\n\n"
           
           if [ -n "$FEATURES" ]; then
             CHANGELOG="${CHANGELOG}## Features\n\n${FEATURES}\n\n"
@@ -79,6 +112,10 @@ jobs:
             CHANGELOG="${CHANGELOG}## Documentation\n\n${DOCS}\n\n"
           fi
           
+          if [ -n "$CHORE" ]; then
+            CHANGELOG="${CHANGELOG}## Chores\n\n${CHORE}\n\n"
+          fi
+          
           if [ -n "$OTHER" ]; then
             CHANGELOG="${CHANGELOG}## Other Changes\n\n${OTHER}\n\n"
           fi
@@ -87,12 +124,14 @@ jobs:
           echo -e "$CHANGELOG" > RELEASE_NOTES.md
           
           # Also output for debugging
-          echo "Generated changelog:"
+          echo "Generated changelog for $PACKAGE_NAME:"
           cat RELEASE_NOTES.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ steps.package_info.outputs.tag }}
+          name: ${{ steps.package_info.outputs.package_name }} ${{ steps.package_info.outputs.version }}
           body_path: RELEASE_NOTES.md
           generate_release_notes: false
         env:
