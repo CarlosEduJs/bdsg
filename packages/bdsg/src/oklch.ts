@@ -11,9 +11,9 @@
 
 import { hexToRgb, rgbToHex } from "./color-utils";
 import {
+	InterpolationFactorSchema,
 	validateHexColor,
 	validateOklch,
-	InterpolationFactorSchema,
 } from "./schemas";
 import type { RGB } from "./types/color-utils.types";
 

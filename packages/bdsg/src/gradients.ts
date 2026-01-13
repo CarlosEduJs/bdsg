@@ -7,9 +7,9 @@
 
 import { hexToOklch, oklchToHex } from "./oklch";
 import {
-	HexColorSchema,
-	GradientStopSchema,
 	GradientConfigSchema,
+	GradientStopSchema,
+	HexColorSchema,
 	StepsSchema,
 	validateOrThrow,
 } from "./schemas";
