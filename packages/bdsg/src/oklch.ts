@@ -10,6 +10,11 @@
  */
 
 import { hexToRgb, rgbToHex } from "./color-utils";
+import {
+	validateHexColor,
+	validateOklch,
+	InterpolationFactorSchema,
+} from "./schemas";
 import type { RGB } from "./types/color-utils.types";
 
 export type { OKLCH } from "./types/oklch.types";
@@ -135,6 +140,7 @@ function oklchToOklab(lch: OKLCH): OKLAB {
  *
  * @param hex - Hex color string (e.g., "#3B82F6")
  * @returns OKLCH object with l (0-1), c (0-0.4+), h (0-360)
+ * @throws Error if hex color is invalid
  *
  * @example
  * ```typescript
@@ -143,6 +149,7 @@ function oklchToOklab(lch: OKLCH): OKLAB {
  * ```
  */
 export function hexToOklch(hex: string): OKLCH {
+	validateHexColor(hex, "hex color");
 	const rgb = hexToRgb(hex);
 	const lab = rgbToOklab(rgb);
 	return oklabToOklch(lab);
@@ -153,6 +160,7 @@ export function hexToOklch(hex: string): OKLCH {
  *
  * @param lch - OKLCH object
  * @returns Hex color string
+ * @throws Error if OKLCH values are invalid
  *
  * @example
  * ```typescript
@@ -161,6 +169,7 @@ export function hexToOklch(hex: string): OKLCH {
  * ```
  */
 export function oklchToHex(lch: OKLCH): string {
+	validateOklch(lch, "OKLCH input");
 	const lab = oklchToOklab(lch);
 	const rgb = oklabToRgb(lab);
 	return rgbToHex(rgb);
@@ -176,6 +185,7 @@ export function oklchToHex(lch: OKLCH): string {
  * @param color2 - End color in OKLCH
  * @param t - Interpolation factor (0-1)
  * @returns Interpolated OKLCH color
+ * @throws Error if inputs are invalid
  *
  * @example
  * ```typescript
@@ -190,8 +200,13 @@ export function interpolateOklch(
 	color2: OKLCH,
 	t: number,
 ): OKLCH {
-	// Clamp t
-	const factor = Math.max(0, Math.min(1, t));
+	// Validate inputs
+	validateOklch(color1, "color1");
+	validateOklch(color2, "color2");
+
+	// Clamp t (but validate it's at least a number)
+	const tResult = InterpolationFactorSchema.safeParse(t);
+	const factor = tResult.success ? t : Math.max(0, Math.min(1, t));
 
 	// Interpolate lightness and chroma linearly
 	const l = color1.l + (color2.l - color1.l) * factor;

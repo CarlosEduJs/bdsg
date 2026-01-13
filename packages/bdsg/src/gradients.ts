@@ -5,45 +5,15 @@
  * Designed for future expansion with different gradient types and easing functions.
  */
 
-import { z } from "zod";
 import { hexToOklch, oklchToHex } from "./oklch";
+import {
+	HexColorSchema,
+	GradientStopSchema,
+	GradientConfigSchema,
+	StepsSchema,
+	validateOrThrow,
+} from "./schemas";
 import type { OKLCH } from "./types/oklch.types";
-
-/**
- * Hex color validation schema
- */
-const HexColorSchema = z
-	.string()
-	.regex(
-		/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
-		"Invalid hex color. Expected format: #RRGGBB or #RGB",
-	);
-
-/**
- * Gradient stop validation schema
- */
-const GradientStopSchema = z.object({
-	color: HexColorSchema,
-	position: z.number().min(0).max(1),
-});
-
-/**
- * Gradient config validation schema
- */
-const GradientConfigSchema = z
-	.object({
-		interpolation: z.enum(["oklch", "linear"]).optional(),
-		// Note: easing is validated by checking if it's a function at runtime
-		hueDirection: z
-			.enum(["shorter", "longer", "increasing", "decreasing"])
-			.optional(),
-	})
-	.optional();
-
-/**
- * Steps validation schema
- */
-const StepsSchema = z.number().int().min(2, "Steps must be at least 2");
 
 /**
  * Easing function type
@@ -146,31 +116,14 @@ export function generateGradient(
 	config: GradientConfig = {},
 ): string[] {
 	// Validate inputs
-	const startResult = HexColorSchema.safeParse(startHex);
-	if (!startResult.success) {
-		throw new Error(
-			`Invalid start color: "${startHex}". ${startResult.error.issues[0]?.message}`,
-		);
-	}
-
-	const endResult = HexColorSchema.safeParse(endHex);
-	if (!endResult.success) {
-		throw new Error(
-			`Invalid end color: "${endHex}". ${endResult.error.issues[0]?.message}`,
-		);
-	}
-
-	const stepsResult = StepsSchema.safeParse(steps);
-	if (!stepsResult.success) {
-		throw new Error(
-			`Invalid steps: ${steps}. ${stepsResult.error.issues[0]?.message}`,
-		);
-	}
-
-	const configResult = GradientConfigSchema.safeParse(config);
-	if (!configResult.success) {
-		throw new Error(`Invalid config: ${configResult.error.issues[0]?.message}`);
-	}
+	validateOrThrow(
+		HexColorSchema,
+		startHex,
+		`Invalid start color: "${startHex}"`,
+	);
+	validateOrThrow(HexColorSchema, endHex, `Invalid end color: "${endHex}"`);
+	validateOrThrow(StepsSchema, steps, `Invalid steps: ${steps}`);
+	validateOrThrow(GradientConfigSchema, config, "Invalid config");
 
 	const { easing = EASING.linear, hueDirection = "shorter" } = config;
 
@@ -222,22 +175,13 @@ export function generateMultiStopGradient(
 		throw new Error("At least 2 stops required for gradient");
 	}
 
+	// Validate each stop
 	for (let i = 0; i < stops.length; i++) {
-		const stopResult = GradientStopSchema.safeParse(stops[i]);
-		if (!stopResult.success) {
-			throw new Error(
-				`Invalid stop at index ${i}: ${stopResult.error.issues[0]?.message}`,
-			);
-		}
+		validateOrThrow(GradientStopSchema, stops[i], `Invalid stop at index ${i}`);
 	}
 
 	// Validate steps
-	const stepsResult = StepsSchema.safeParse(steps);
-	if (!stepsResult.success) {
-		throw new Error(
-			`Invalid steps: ${steps}. ${stepsResult.error.issues[0]?.message}`,
-		);
-	}
+	validateOrThrow(StepsSchema, steps, `Invalid steps: ${steps}`);
 
 	// Sort stops by position
 	const sortedStops = [...stops].sort((a, b) => a.position - b.position);

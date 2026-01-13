@@ -3,9 +3,9 @@
  * Generates a complete color palette from a base color using perceptually uniform OKLCH
  */
 
-import { z } from "zod";
 import { calculateContrast } from "./contrast";
 import { hexToOklch, oklchToHex } from "./oklch";
+import { HexColorSchema, validateOrThrow } from "./schemas";
 import type { OKLCH } from "./types/oklch.types";
 
 export type {
@@ -19,17 +19,6 @@ import type {
 	ColorShade,
 	PaletteToken,
 } from "./types/palette.types";
-
-/**
- * Hex color validation schema
- * Accepts 3-character (#RGB) or 6-character (#RRGGBB) hex colors
- */
-const HexColorSchema = z
-	.string()
-	.regex(
-		/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
-		"Invalid hex color. Expected format: #RRGGBB or #RGB",
-	);
 
 /**
  * Shade configuration (OKLCH lightness targets)
@@ -137,12 +126,12 @@ export function generatePalette(
 	baseColor: string,
 	name?: string,
 ): ColorPalette {
-	const parseResult = HexColorSchema.safeParse(baseColor); // validate input color
-	if (!parseResult.success) {
-		throw new Error(
-			`Invalid base color: "${baseColor}". ${parseResult.error.issues[0]?.message}`,
-		);
-	}
+	// Validate input color
+	validateOrThrow(
+		HexColorSchema,
+		baseColor,
+		`Invalid base color: "${baseColor}"`,
+	);
 
 	const baseOklch = hexToOklch(baseColor);
 
