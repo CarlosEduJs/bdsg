@@ -1,5 +1,4 @@
 import { describe, expect, test } from "bun:test";
-import { generateGradient } from "../src/gradients";
 import { hexToOklch, interpolateOklch, oklchToHex } from "../src/oklch";
 
 describe("OKLCH Color Space", () => {
@@ -29,6 +28,10 @@ describe("OKLCH Color Space", () => {
 			expect(oklch.c).toBeGreaterThan(0.3); // Blue has very high chroma
 			expect(oklch.h).toBeCloseTo(264, 0); // Blue hue is around 264°
 		});
+
+		test("throws on invalid hex", () => {
+			expect(() => hexToOklch("invalid")).toThrow();
+		});
 	});
 
 	describe("oklchToHex", () => {
@@ -51,6 +54,13 @@ describe("OKLCH Color Space", () => {
 				// Allow small rounding differences
 				expect(roundtripped.toLowerCase()).toBe(original.toLowerCase());
 			}
+		});
+
+		test("throws on invalid OKLCH values", () => {
+			expect(() => oklchToHex({ l: 2, c: 0, h: 0 })).toThrow();
+			expect(() => oklchToHex({ l: -1, c: 0, h: 0 })).toThrow();
+			expect(() => oklchToHex({ l: 0.5, c: -1, h: 0 })).toThrow();
+			expect(() => oklchToHex({ l: 0.5, c: 0, h: 400 })).toThrow();
 		});
 	});
 
@@ -94,30 +104,18 @@ describe("OKLCH Color Space", () => {
 			// Should be around 0 (or 360), not 180
 			expect(result.h).toBeLessThan(30);
 		});
-	});
 
-	describe("generateGradient", () => {
-		test("generates correct number of steps", () => {
-			const gradient = generateGradient("#ff0000", "#0000ff", 5);
-			expect(gradient).toHaveLength(5);
-		});
+		test("clamps t to 0-1 range", () => {
+			const start = hexToOklch("#ff0000");
+			const end = hexToOklch("#00ff00");
 
-		test("starts and ends with correct colors", () => {
-			const gradient = generateGradient("#ff0000", "#0000ff", 5);
-			expect(gradient[0]?.toLowerCase()).toBe("#ff0000");
-			expect(gradient[4]?.toLowerCase()).toBe("#0000ff");
-		});
+			// t < 0 should behave like t = 0
+			const resultNeg = interpolateOklch(start, end, -0.5);
+			expect(resultNeg.l).toBeCloseTo(start.l, 5);
 
-		test("produces vibrant midpoints (no muddy zone)", () => {
-			// Red to Green in RGB produces muddy brown in the middle
-			// OKLCH should produce vibrant yellow/orange
-			const gradient = generateGradient("#ff0000", "#00ff00", 5);
-			const middle = gradient[2];
-			if (!middle) throw new Error("Middle color is undefined");
-
-			const middleOklch = hexToOklch(middle);
-			// Middle should have decent chroma (not muddy)
-			expect(middleOklch.c).toBeGreaterThan(0.1);
+			// t > 1 should behave like t = 1
+			const resultOver = interpolateOklch(start, end, 1.5);
+			expect(resultOver.l).toBeCloseTo(end.l, 5);
 		});
 	});
 });
