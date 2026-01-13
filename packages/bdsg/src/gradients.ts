@@ -5,8 +5,45 @@
  * Designed for future expansion with different gradient types and easing functions.
  */
 
+import { z } from "zod";
 import { hexToOklch, oklchToHex } from "./oklch";
 import type { OKLCH } from "./types/oklch.types";
+
+/**
+ * Hex color validation schema
+ */
+const HexColorSchema = z
+	.string()
+	.regex(
+		/^#?([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/,
+		"Invalid hex color. Expected format: #RRGGBB or #RGB",
+	);
+
+/**
+ * Gradient stop validation schema
+ */
+const GradientStopSchema = z.object({
+	color: HexColorSchema,
+	position: z.number().min(0).max(1),
+});
+
+/**
+ * Gradient config validation schema
+ */
+const GradientConfigSchema = z
+	.object({
+		interpolation: z.enum(["oklch", "linear"]).optional(),
+		// Note: easing is validated by checking if it's a function at runtime
+		hueDirection: z
+			.enum(["shorter", "longer", "increasing", "decreasing"])
+			.optional(),
+	})
+	.optional();
+
+/**
+ * Steps validation schema
+ */
+const StepsSchema = z.number().int().min(2, "Steps must be at least 2");
 
 /**
  * Easing function type
@@ -85,9 +122,10 @@ function interpolateHue(
  *
  * @param startHex - Start color in hex
  * @param endHex - End color in hex
- * @param steps - Number of color stops
+ * @param steps - Number of color stops (minimum 2)
  * @param config - Optional gradient configuration
  * @returns Array of hex colors
+ * @throws Error if inputs are invalid
  *
  * @example
  * ```typescript
@@ -107,6 +145,33 @@ export function generateGradient(
 	steps: number,
 	config: GradientConfig = {},
 ): string[] {
+	// Validate inputs
+	const startResult = HexColorSchema.safeParse(startHex);
+	if (!startResult.success) {
+		throw new Error(
+			`Invalid start color: "${startHex}". ${startResult.error.issues[0]?.message}`,
+		);
+	}
+
+	const endResult = HexColorSchema.safeParse(endHex);
+	if (!endResult.success) {
+		throw new Error(
+			`Invalid end color: "${endHex}". ${endResult.error.issues[0]?.message}`,
+		);
+	}
+
+	const stepsResult = StepsSchema.safeParse(steps);
+	if (!stepsResult.success) {
+		throw new Error(
+			`Invalid steps: ${steps}. ${stepsResult.error.issues[0]?.message}`,
+		);
+	}
+
+	const configResult = GradientConfigSchema.safeParse(config);
+	if (!configResult.success) {
+		throw new Error(`Invalid config: ${configResult.error.issues[0]?.message}`);
+	}
+
 	const { easing = EASING.linear, hueDirection = "shorter" } = config;
 
 	const start = hexToOklch(startHex);
@@ -133,9 +198,10 @@ export function generateGradient(
  * Generate a multi-stop gradient
  *
  * @param stops - Array of gradient stops with color and position
- * @param steps - Total number of output colors
+ * @param steps - Total number of output colors (minimum 2)
  * @param config - Optional gradient configuration
  * @returns Array of hex colors
+ * @throws Error if inputs are invalid
  *
  * @example
  * ```typescript
@@ -151,8 +217,26 @@ export function generateMultiStopGradient(
 	steps: number,
 	config: GradientConfig = {},
 ): string[] {
+	// Validate stops
 	if (stops.length < 2) {
 		throw new Error("At least 2 stops required for gradient");
+	}
+
+	for (let i = 0; i < stops.length; i++) {
+		const stopResult = GradientStopSchema.safeParse(stops[i]);
+		if (!stopResult.success) {
+			throw new Error(
+				`Invalid stop at index ${i}: ${stopResult.error.issues[0]?.message}`,
+			);
+		}
+	}
+
+	// Validate steps
+	const stepsResult = StepsSchema.safeParse(steps);
+	if (!stepsResult.success) {
+		throw new Error(
+			`Invalid steps: ${steps}. ${stepsResult.error.issues[0]?.message}`,
+		);
 	}
 
 	// Sort stops by position
@@ -221,9 +305,10 @@ export function generateMultiStopGradient(
  * Generate CSS gradient string
  *
  * @param type - Gradient type: "linear" | "radial" | "conic"
- * @param colors - Array of hex colors
+ * @param colors - Array of hex colors (minimum 1)
  * @param angle - Angle for linear gradient (default: 90deg)
  * @returns CSS gradient string
+ * @throws Error if colors array is empty
  *
  * @example
  * ```typescript
@@ -237,6 +322,10 @@ export function toCssGradient(
 	colors: string[],
 	angle = 90,
 ): string {
+	if (colors.length === 0) {
+		throw new Error("At least 1 color required for CSS gradient");
+	}
+
 	const colorStr = colors.join(", ");
 
 	switch (type) {
