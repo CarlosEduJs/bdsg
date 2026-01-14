@@ -36,6 +36,7 @@ bdsg generate palette "#3B82F6" -n primary
 bdsg generate typography -r golden-ratio
 bdsg generate spacing -m fibonacci
 bdsg generate shadows -s material
+bdsg generate gradient "#FF0000" "#0000FF" -s 5
 
 # Validate WCAG contrast
 bdsg validate "#3B82F6" "#FFFFFF"
@@ -158,6 +159,51 @@ Options:
 ```
 
 Available styles: `material`, `soft`, `hard`
+
+#### generate gradient
+
+*New in v0.2.0*
+
+```bash
+bdsg generate gradient <startColor> <endColor> [options]
+
+Arguments:
+  startColor           Start color in hex format (e.g., #FF0000)
+  endColor             End color in hex format (e.g., #0000FF)
+
+Options:
+  -n, --name <name>       Gradient name (default: "gradient")
+  -s, --steps <steps>     Number of color steps (default: "5")
+  -e, --easing <easing>   Easing function (default: "linear")
+  -d, --direction <dir>   Hue direction (default: "shorter")
+  -o, --output <dir>      Output directory (default: "./tokens")
+  -f, --format <fmt>      Output format: css, json (default: "css")
+```
+
+Available easing: `linear`, `easeIn`, `easeOut`, `easeInOut`
+
+Available hue directions: `shorter`, `longer`, `increasing`, `decreasing`
+
+**Example:**
+
+```
+$ bdsg generate gradient "#FF0000" "#0000FF" -s 5 -e easeInOut
+
+✔ Gradient generated!
+
+File: ./tokens/gradient.css
+
+Gradient colors:
+  1: #ff0000
+  2: #e8007b
+  3: #ba00c2
+  4: #7a00f4
+  5: #0000ff
+
+CSS Gradients:
+  linear: linear-gradient(90deg, #ff0000, #e8007b, #ba00c2, #7a00f4, #0000ff)
+  radial: radial-gradient(circle, #ff0000, #e8007b, #ba00c2, #7a00f4, #0000ff)
+```
 
 ### validate
 
