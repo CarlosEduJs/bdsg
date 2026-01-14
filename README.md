@@ -19,6 +19,8 @@ Design System Generation library for programmatic token creation with WCAG acces
 
 bdsg provides algorithms for generating design tokens:
 
+- OKLCH color space for perceptually uniform palettes ^0.2.0
+- Gradient generation with easing and hue control ^0.2.0
 - Color palettes with automatic text color calculation
 - Typography scales using musical ratios
 - Spacing scales (Fibonacci, linear, exponential)
@@ -91,6 +93,8 @@ const shadows = generateShadows({
 | Module | Functions |
 |--------|-----------|
 | color-utils | `hexToRgb`, `rgbToHex`, `hexToHsl`, `hslToHex`, `rgbToHsl`, `hslToRgb` |
+| oklch | `hexToOklch`, `oklchToHex`, `interpolateOklch` |
+| gradients | `generateGradient`, `generateMultiStopGradient`, `toCssGradient`, `EASING` |
 | contrast | `calculateContrast`, `getRelativeLuminance`, `meetsWCAG`, `getWCAGCompliance` |
 | adjust | `adjustColorForContrast`, `generateAccessibleVariations` |
 | palette | `generatePalette`, `generatePaletteTokens` |
