@@ -28,6 +28,23 @@ export {
 	type WCAGCompliance,
 	type WCAGLevel,
 } from "./contrast.js";
+// Gradients
+export {
+	EASING,
+	type EasingFunction,
+	type GradientConfig,
+	type GradientStop,
+	generateGradient,
+	generateMultiStopGradient,
+	toCssGradient,
+} from "./gradients.js";
+// OKLCH color space
+export {
+	hexToOklch,
+	interpolateOklch,
+	type OKLCH,
+	oklchToHex,
+} from "./oklch.js";
 // Palette generation
 export {
 	type ColorPalette,
