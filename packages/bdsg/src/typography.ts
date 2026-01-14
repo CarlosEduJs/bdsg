@@ -8,17 +8,18 @@
 import { z } from "zod";
 
 export type {
+	TypographyExportToken,
 	TypographyRatio,
-	TypographyToken,
-	TypographyScaleConfig,
 	TypographyScale,
-	TypographyExportToken,
+	TypographyScaleConfig,
+	TypographyToken,
 } from "./types/typography.types";
+
 import type {
-	TypographyToken,
-	TypographyScaleConfig,
-	TypographyScale,
 	TypographyExportToken,
+	TypographyScale,
+	TypographyScaleConfig,
+	TypographyToken,
 } from "./types/typography.types";
 
 /**

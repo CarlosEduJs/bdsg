@@ -6,6 +6,7 @@
  */
 
 export type { Node, RelationSuggestion } from "./types/relations.types";
+
 import type { Node, RelationSuggestion } from "./types/relations.types";
 
 /**

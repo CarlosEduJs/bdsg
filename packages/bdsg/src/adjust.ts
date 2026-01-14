@@ -4,15 +4,16 @@
  */
 
 import { hexToHsl, hslToHex } from "./color-utils";
-import type { HSL } from "./types/color-utils.types";
 import {
 	calculateContrast,
 	getRelativeLuminance,
 	WCAG_REQUIREMENTS,
 } from "./contrast";
+import type { HSL } from "./types/color-utils.types";
 import type { TextSize, WCAGLevel } from "./types/contrast.types";
 
 export type { AdjustmentResult, ColorVariations } from "./types/adjust.types";
+
 import type { AdjustmentResult, ColorVariations } from "./types/adjust.types";
 
 /**

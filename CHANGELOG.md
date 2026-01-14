@@ -5,6 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [bdsg 0.2.0] - 2026-01-14
+
+### Added
+
+- **OKLCH Color Space**: New perceptually uniform color space support
+  - `hexToOklch()` - Convert HEX to OKLCH (L: 0-1, C: 0+, H: 0-360)
+  - `oklchToHex()` - Convert OKLCH back to HEX
+  - `interpolateOklch()` - Smooth color interpolation without "muddy middle"
+- **Gradient Generation**: New `gradients.ts` module with expandable architecture
+  - `generateGradient()` - Two-color gradient with OKLCH interpolation
+  - `generateMultiStopGradient()` - Multi-stop gradients with position control
+  - `toCssGradient()` - Generate CSS linear/radial/conic gradient strings
+  - `EASING` presets - `linear`, `easeIn`, `easeOut`, `easeInOut`
+  - Hue direction control: `shorter`, `longer`, `increasing`, `decreasing`
+- **OKLCH Types**: New `oklch.types.ts` with `OKLCH` interface
+
+### Changed
+
+- **Palette Generation**: Refactored `generatePalette()` to use OKLCH instead of HSL for perceptually uniform shade generation
+- **Centralized Validation**: Created `schemas.ts` with shared Zod schemas
+  - `HexColorSchema`, `OklchSchema`, `RgbSchema`, `HslSchema`
+  - `GradientStopSchema`, `GradientConfigSchema`, `StepsSchema`
+  - `validateOrThrow()` helper function for cleaner validation code
+- **Code Quality**: All modules now use centralized validation schemas
+
+### Tests
+
+- Added 14 new tests for OKLCH conversions (`oklch.test.ts`)
+- Added 22 new tests for gradients (`gradients.test.ts`)
+- Total: 284 tests across 11 files
+
+[bdsg 0.2.0]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg@v0.2.0
+
 ## [bdsg-cli 0.1.2] - 2026-01-12
 
 ### Fixed

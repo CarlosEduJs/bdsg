@@ -12,6 +12,8 @@ Design System Generation library. Algorithms for generating design tokens progra
 - [Quick Start](#quick-start)
 - [API Reference](#api-reference)
   - [Color Utilities](#color-utilities)
+  - [OKLCH Color Space](#oklch-color-space)
+  - [Gradients](#gradients)
   - [Contrast](#contrast)
   - [Color Adjustment](#color-adjustment)
   - [Palette Generation](#palette-generation)
@@ -87,6 +89,89 @@ rgbToHex({ r: 0, g: 128, b: 255 });  // "#0080ff"
 hexToHsl("#3B82F6");           // { h: 217, s: 91, l: 60 }
 hslToHex({ h: 0, s: 100, l: 50 });   // "#ff0000"
 ```
+
+### OKLCH Color Space - ^0.2.0
+
+OKLCH is a perceptually uniform color space that provides better gradient interpolation and more intuitive color manipulation.
+
+```typescript
+import { hexToOklch, oklchToHex, interpolateOklch } from "bdsg";
+
+// Convert between HEX and OKLCH
+const oklch = hexToOklch("#3B82F6");
+// { l: 0.623, c: 0.185, h: 259.5 }
+// l: lightness (0-1), c: chroma (0+), h: hue (0-360)
+
+oklchToHex({ l: 0.623, c: 0.185, h: 259.5 });  // "#3b82f6"
+
+// Interpolate colors without "muddy middle"
+const red = hexToOklch("#FF0000");
+const green = hexToOklch("#00FF00");
+const middle = interpolateOklch(red, green, 0.5);
+// Produces vibrant yellow, not muddy brown like RGB interpolation
+```
+
+Why OKLCH?
+- **Perceptually uniform**: Equal lightness values look equally bright across all hues
+- **No muddy gradients**: Interpolation stays vibrant, avoiding the brown/gray zone
+- **Intuitive**: Hue, chroma, and lightness are independent
+
+### Gradients - ^0.2.0
+
+Generate smooth color gradients using OKLCH interpolation with easing and hue direction control.
+
+```typescript
+import {
+  generateGradient,
+  generateMultiStopGradient,
+  toCssGradient,
+  EASING
+} from "bdsg";
+
+// Simple two-color gradient
+const gradient = generateGradient("#FF0000", "#0000FF", 5);
+// ["#ff0000", "#c5007c", "#9100c9", "#5c00ed", "#0000ff"]
+
+// With easing function
+const smooth = generateGradient("#000000", "#FFFFFF", 5, {
+  easing: EASING.easeInOut
+});
+
+// Control hue direction (shorter or longer path around color wheel)
+const rainbow = generateGradient("#FF0000", "#FF8800", 5, {
+  hueDirection: "longer"  // Takes the long way through blue/purple
+});
+
+// Multi-stop gradient
+const sunset = generateMultiStopGradient([
+  { color: "#FF0000", position: 0 },
+  { color: "#FFFF00", position: 0.3 },
+  { color: "#00FF00", position: 1 }
+], 10);
+
+// Generate CSS gradient string
+const colors = generateGradient("#FF0000", "#0000FF", 3);
+toCssGradient("linear", colors, 45);
+// "linear-gradient(45deg, #ff0000, #800080, #0000ff)"
+
+toCssGradient("radial", colors);
+// "radial-gradient(circle, #ff0000, #800080, #0000ff)"
+
+toCssGradient("conic", colors, 90);
+// "conic-gradient(from 90deg, #ff0000, #800080, #0000ff)"
+```
+
+Available easing functions:
+- `EASING.linear` — Constant speed
+- `EASING.easeIn` — Slow start, accelerates
+- `EASING.easeOut` — Fast start, decelerates
+- `EASING.easeInOut` — Slow start and end
+
+Hue direction options:
+- `"shorter"` — Takes shortest path around color wheel (default)
+- `"longer"` — Takes longer path for rainbow effects
+- `"increasing"` — Always increases hue
+- `"decreasing"` — Always decreases hue
 
 ### Contrast
 
