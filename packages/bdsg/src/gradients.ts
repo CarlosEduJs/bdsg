@@ -32,8 +32,6 @@ export interface GradientStop {
  * Gradient configuration
  */
 export interface GradientConfig {
-	/** Color interpolation method */
-	interpolation?: "oklch" | "linear";
 	/** Easing function for transition */
 	easing?: EasingFunction;
 	/** Hue interpolation direction for OKLCH */

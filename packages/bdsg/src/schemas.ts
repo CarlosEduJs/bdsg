@@ -75,7 +75,6 @@ export const HueDirectionSchema = z.enum([
  */
 export const GradientConfigSchema = z
 	.object({
-		interpolation: z.enum(["oklch", "linear"]).optional(),
 		hueDirection: HueDirectionSchema.optional(),
 	})
 	.optional();

@@ -19,8 +19,8 @@ Design System Generation library for programmatic token creation with WCAG acces
 
 bdsg provides algorithms for generating design tokens:
 
-- OKLCH color space for perceptually uniform palettes ^0.2.0
-- Gradient generation with easing and hue control ^0.2.0
+- OKLCH color space for perceptually uniform palettes `v0.2.0`
+- Gradient generation with easing and hue control `v0.2.0`
 - Color palettes with automatic text color calculation
 - Typography scales using musical ratios
 - Spacing scales (Fibonacci, linear, exponential)
