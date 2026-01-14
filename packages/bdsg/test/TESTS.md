@@ -2,14 +2,14 @@
 
 This document is auto-generated from the test files. Do not edit manually.
 
-Generated: 2026-01-12
+Generated: 2026-01-14
 
 ## Overview
 
 | Metric | Value |
 |--------|-------|
-| Total Tests | 263 |
-| Test Files | 10 |
+| Total Tests | 285 |
+| Test Files | 11 |
 
 ---
 
@@ -20,6 +20,7 @@ test/
   adjust.test.ts  # Adjust (20 tests)
   color-utils.test.ts  # Color Utils (34 tests)
   contrast.test.ts  # Contrast (39 tests)
+  gradients.test.ts  # Gradients (22 tests)
   index.test.ts  # Index (33 tests)
   oklch.test.ts  # Oklch (14 tests)
   palette.test.ts  # Palette (22 tests)
@@ -38,6 +39,7 @@ test/
 | Adjust | `adjust.test.ts` | 20 | 3 |
 | Color Utils | `color-utils.test.ts` | 34 | 2 |
 | Contrast | `contrast.test.ts` | 39 | 6 |
+| Gradients | `gradients.test.ts` | 22 | 1 |
 | Index | `index.test.ts` | 33 | 1 |
 | Oklch | `oklch.test.ts` | 14 | 1 |
 | Palette | `palette.test.ts` | 22 | 4 |
@@ -230,6 +232,47 @@ test/
 
 ---
 
+## Gradients
+
+**File:** `test/gradients.test.ts`
+
+**Total Tests:** 22
+
+### Test Suites
+
+| Suite | Tests | Description |
+|-------|-------|-------------|
+| Gradient Generation | 22 | Test suite |
+
+### Test Cases
+
+#### Gradient Generation
+
+- generates correct number of steps
+- starts and ends with correct colors
+- produces vibrant midpoints (no muddy zone)
+- throws on invalid start color
+- throws on invalid end color
+- throws on steps less than 2
+- applies easeIn correctly
+- applies easeOut correctly
+- shorter takes shortest hue path
+- longer takes longer hue path
+- generates gradient with multiple stops
+- throws on less than 2 stops
+- throws on invalid stop color
+- throws on invalid position
+- generates linear gradient
+- generates radial gradient
+- generates conic gradient
+- throws on empty colors array
+- linear returns t unchanged
+- easeIn returns t squared
+- easeOut is faster early
+- easeInOut is symmetric
+
+---
+
 ## Index
 
 **File:** `test/index.test.ts`
@@ -302,16 +345,16 @@ test/
 - converts black correctly
 - converts pure red correctly
 - converts pure blue correctly
+- throws on invalid hex
 - converts white correctly
 - converts black correctly
 - roundtrips colors accurately
+- throws on invalid OKLCH values
 - returns start color at t=0
 - returns end color at t=1
 - returns midpoint at t=0.5
 - takes shortest hue path
-- generates correct number of steps
-- starts and ends with correct colors
-- produces vibrant midpoints (no muddy zone)
+- clamps t to 0-1 range
 
 ---
 
