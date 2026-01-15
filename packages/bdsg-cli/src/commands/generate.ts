@@ -1,10 +1,13 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import {
+	EASING,
+	generateGradient,
 	generatePalette,
 	generateShadows,
 	generateSpacingScale,
 	generateTypographyScale,
+	toCssGradient,
 } from "bdsg";
 import chalk from "chalk";
 import { Command } from "commander";
@@ -229,6 +232,92 @@ export const generateCommand = new Command("generate")
 					console.log();
 				} catch (error) {
 					spinner.fail(chalk.red("Failed to generate shadows"));
+					console.error(error);
+					process.exit(1);
+				}
+			}),
+	)
+	.addCommand(
+		new Command("gradient")
+			.description("Generate a color gradient")
+			.argument("<startColor>", "Start color in hex format (e.g., #FF0000)")
+			.argument("<endColor>", "End color in hex format (e.g., #0000FF)")
+			.option("-n, --name <name>", "Gradient name", "gradient")
+			.option("-s, --steps <steps>", "Number of color steps", "5")
+			.option(
+				"-e, --easing <easing>",
+				"Easing function (linear, easeIn, easeOut, easeInOut)",
+				"linear",
+			)
+			.option(
+				"-d, --direction <direction>",
+				"Hue direction (shorter, longer, increasing, decreasing)",
+				"shorter",
+			)
+			.option("-o, --output <dir>", "Output directory", "./tokens")
+			.option("-f, --format <format>", "Output format (css, json)", "css")
+			.action(async (startColor, endColor, options) => {
+				const spinner = ora("Generating gradient...").start();
+
+				try {
+					const steps = Number.parseInt(options.steps, 10);
+					const easingFn =
+						EASING[options.easing as keyof typeof EASING] || EASING.linear;
+
+					const colors = generateGradient(startColor, endColor, steps, {
+						easing: easingFn,
+						hueDirection: options.direction,
+					});
+
+					await mkdir(options.output, { recursive: true });
+
+					if (options.format === "json") {
+						const gradient: Record<string, unknown> = {
+							name: options.name,
+							start: startColor,
+							end: endColor,
+							steps,
+							colors,
+							css: {
+								linear: toCssGradient("linear", colors, 90),
+								radial: toCssGradient("radial", colors),
+							},
+						};
+						await writeFile(
+							join(options.output, `${options.name}.json`),
+							JSON.stringify({ gradient }, null, 2),
+						);
+					} else {
+						let css = ":root {\n";
+						for (let i = 0; i < colors.length; i++) {
+							css += `  --${options.name}-${i + 1}: ${colors[i]};\n`;
+						}
+						css += `  --${options.name}-linear: ${toCssGradient("linear", colors, 90)};\n`;
+						css += `  --${options.name}-radial: ${toCssGradient("radial", colors)};\n`;
+						css += "}\n";
+						await writeFile(join(options.output, `${options.name}.css`), css);
+					}
+
+					spinner.succeed(chalk.green("Gradient generated!"));
+					console.log(
+						chalk.dim(
+							`\nFile: ${options.output}/${options.name}.${options.format}`,
+						),
+					);
+					console.log();
+
+					// Show preview
+					console.log(chalk.bold("Gradient colors:"));
+					for (let i = 0; i < colors.length; i++) {
+						console.log(`  ${i + 1}: ${colors[i]}`);
+					}
+					console.log();
+					console.log(chalk.bold("CSS Gradients:"));
+					console.log(`  linear: ${toCssGradient("linear", colors, 90)}`);
+					console.log(`  radial: ${toCssGradient("radial", colors)}`);
+					console.log();
+				} catch (error) {
+					spinner.fail(chalk.red("Failed to generate gradient"));
 					console.error(error);
 					process.exit(1);
 				}

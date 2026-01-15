@@ -38,6 +38,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 [bdsg 0.2.0]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg@v0.2.0
 
+## [bdsg-cli 0.2.0] - 2026-01-14
+
+### Added
+
+- **Gradient Command**: New `bdsg generate gradient` command
+  - Generate color gradients with OKLCH interpolation
+  - Easing functions: `linear`, `easeIn`, `easeOut`, `easeInOut`
+  - Hue direction control: `shorter`, `longer`, `increasing`, `decreasing`
+  - Output CSS variables and gradient strings
+  - JSON export with gradient metadata
+
+### Changed
+
+- **Dependencies**: Updated `bdsg` dependency to `^0.2.0`
+
+[bdsg-cli 0.2.0]: https://github.com/CarlosEduJs/bdsg/releases/tag/bdsg-cli@v0.2.0
+
 ## [bdsg-cli 0.1.2] - 2026-01-12
 
 ### Fixed
